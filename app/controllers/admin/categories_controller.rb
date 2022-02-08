@@ -16,6 +16,7 @@ class Admin::CategoriesController < ApplicationController
       redirect_to [:admin, :categories], notice: 'Category created!'
     else
       render :new
+      
     end
   end
 
