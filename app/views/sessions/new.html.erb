@@ -7,19 +7,19 @@
 
   <div class="row">
     <div class="col-sm-6 col-sm-offset-1">
-      <%= form_tag('/login') do %>
+      <%= form_for :user, :url => '/login' do |form| %>
 
         <div class="form-group">
-          <%= label_tag :email %>
-          <%= text_field_tag :email %>
+          <%= form.label :email %>
+          <%= form.text_field :email, class: 'form-control' %>
         </div>
 
         <div class="form-group">
-          <%= label_tag :password %>
-          <%= password_field_tag :password %>
+          <%= form.label :password %>
+          <%= form.password_field :password, class: 'form-control' %>
         </div>
 
-        <%= submit_tag 'Submit', class: 'btn btn-primary' %>
+        <%= form.submit 'Submit', class: 'btn btn-primary' %>
       <% end %>
     </div>
   </div>
