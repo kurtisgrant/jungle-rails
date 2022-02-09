@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+
   describe 'Validations' do
 
     before do
@@ -16,7 +17,6 @@ RSpec.describe User, type: :model do
       @user.save
       @user2 = User.create(name: 'R.R.L. Stine', email: 'test@testing.com', password: 'bestpass', password_confirmation: 'bestpass')
       @user2
-      puts @user2.errors.full_messages.inspect
       expect(@user2.errors.full_messages).to include("Email has already been taken")
     end
 
@@ -52,4 +52,48 @@ RSpec.describe User, type: :model do
     end
 
   end
+
+  describe '.authenticate_with_credentials' do
+    before do
+      @email = 'example@example.com'
+      @password = 'password!'
+      @user = User.create(
+        name: 'Jessica Exampleson', 
+        email: @email, 
+        password: @password, 
+        password_confirmation: @password
+      )
+    end
+
+    it 'should not authenticate user with incorrect email' do
+      email = 'jess@example.com'
+      auth = User.authenticate_with_credentials(email, @password)
+      expect(auth).to eq nil
+    end
+
+    it 'should not authenticate user with incorrect password' do
+      password = 'password?'
+      auth = User.authenticate_with_credentials(@email, password)
+      expect(auth).to eq nil
+    end
+
+    it 'should authenticate user with correct email & password' do
+      auth = User.authenticate_with_credentials(@email, @password)
+      expect(auth).to eq @user
+    end
+
+    it 'should authenticate user with space before email' do
+      email_with_space = ' ' + @email
+      auth = User.authenticate_with_credentials(email_with_space, @password)
+      expect(auth).to eq @user
+    end
+
+    it 'should authenticate user with incorrect email case' do
+      email_uppercase = @email.upcase
+      auth = User.authenticate_with_credentials(email_uppercase, @password)
+      expect(auth).to eq @user
+    end
+
+  end
+
 end
